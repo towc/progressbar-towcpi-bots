@@ -4,7 +4,7 @@ const http = require('http');
 
 const screenWidth = 38;
 const screenHeight = 2;
-const eventNameCharAmount = screenWidth - 2 - 11 - 2;
+const eventNameCharAmount = screenWidth - 2 - 11 - 3;
 
 let eventData = '';
 
@@ -22,6 +22,8 @@ const checkMsg = () => {
         
         const displayText = items.map(({title, start_date}) => {
           title = title._text;
+
+          // standardize text to ascii
           [
             [[225], 'a']
           ].forEach(([originals, result]) => {
@@ -30,10 +32,19 @@ const checkMsg = () => {
             }) 
           });
 
-          let date = new Date(start_date._text);
-          return `${title
-              .substring(0, eventNameCharAmount)
-              .padEnd(' ', eventNameCharAmount)}  ${date.toJSON().match(/\d\d-\d\dT\d\d:\d\d/)[0].replace('-', '/').replace('T', ' ')}`
+          if(title.length > eventNameCharAmount) {
+            title = title.substring(0, eventNameCharAmount - 1) + '-';
+          } else {
+            title = title.padEnd(' ', eventNameCharAmount); 
+          }
+
+          let date = new Date(start_date._text)
+            .toJSON()
+            .match(/\d\d-\d\dT\d\d:\d\d/)[0]
+            .replace('-', '/')
+            .replace('T', ' ');
+
+          return `${title}  ${date} `
             .padEnd(' ', screenWidth);
         }).join('')
         console.log(displayText);
