@@ -1,16 +1,22 @@
 const Logger = require('./logger.js');
+const logger = new Logger(['main']);
 
 module.exports = (moduleString) => {
   [parentModuleName, ...moduleList] = moduleString.split('\n');
-  const logger = new Logger(parentModuleName);
 
   return moduleList
-    .filter((moduleName) => moduleName.trim().length > 0)
+    .map((moduleName) => moduleName.trim())
+    .filter((moduleName) => moduleName.length > 0 && !moduleName.startsWith('#'))
     .map((moduleName) => {
       logger.log(`loading ${moduleName}`);
-      logger.incDepth();
-      const res = require(`./${moduleName.trim()}.js`);
-      logger.decDepth();
+      logger.push(moduleName);
+      let res;
+      switch(moduleName) {
+        case 'logger': res = new Logger([...logger.trace]);
+          break;
+        default: res = require(moduleName.startsWith('@') ? moduleName.replace(/^./, '').trim() : `./${moduleName}`);
+      }
+      logger.pop();
       logger.log(`loaded ${moduleName}`);
       return res;
     })

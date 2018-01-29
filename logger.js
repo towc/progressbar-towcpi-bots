@@ -1,16 +1,18 @@
 class Logger {
-  constructor(namespace) {
-    this.namespace = namespace;
+  constructor(trace) {
+    this.trace = trace;
   }
   log(text) {
-    console.log(`${new Date().toJSON()} ${Array(Logger.depth).fill(' -> ').join('')}${this.namespace}: ${text}`);
+    console.log(`${new Date().toJSON()} ${this.trace.join(' -> ')}: ${text}`);
   }
-  incDepth(amount=1) {
-    Logger.depth += amount;
-    return Logger.depth;
+  push(module) {
+    this.trace.push(module); 
   }
-  decDepth(amount=1) {
-    return this.incDepth(-amount);
+  pop(amount=1) {
+    while(amount > 0) {
+      this.trace.pop(); 
+      --amount;
+    }
   }
 }
 Logger.depth = 0;

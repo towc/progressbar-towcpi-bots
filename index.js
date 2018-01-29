@@ -1,4 +1,6 @@
-require('./module-loader.js')(`main
-controller
-msg-bar-calendar
+require('./module-loader.js')
+(`main
+
+  controller
+  calendar
 `);
