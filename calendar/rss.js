@@ -17,7 +17,6 @@ module.exports = ({
   getItems() {
     return parser.parseURL('http://progressbar.sk/calendar.rss').then(({ items }) => {
       this.virtualState.prevHash = this.virtualState.hash;
-      logger.log(items[0].start_date);
       items = items.map(({ start_date, ...item }) => ({ date: new Date(start_date), ...item }));
       this.virtualState.items = items;
       this.virtualState.hash = JSON.stringify(items);

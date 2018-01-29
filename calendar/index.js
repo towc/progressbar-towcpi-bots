@@ -18,7 +18,6 @@ calendarRSS.listen(({ items }) => {
       title.substring(0, opts.eventNameCharAmount - 1) + '-' :
       title.padEnd(' ', opts.eventNameCharAmount);
 
-    logger.log(date.getDate());
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const hour = date.getHours().toString().padStart(2, '0');
