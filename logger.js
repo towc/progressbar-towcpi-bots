@@ -5,6 +5,12 @@ class Logger {
   log(text) {
     console.log(`${new Date().toJSON()} ${this.trace.join(' -> ')}: ${text}`);
   }
+  error(text) {
+    this.log(text ? `ERROR: ${text}` : `ERROR`);
+  }
+  ok(text) {
+    this.log(text ? `OK: ${text}` : `OK`);
+  }
   push(module) {
     this.trace.push(module); 
   }
