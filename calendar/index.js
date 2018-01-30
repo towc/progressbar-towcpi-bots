@@ -1,13 +1,16 @@
-const [ logger, calendarRSS, msgBar ] = require('./../module-loader.js')
+const [ logger, calendarRSS, msgBar, blackDoor ] = require('./../module-loader.js')
 (`calendar
 
   logger
   calendar/rss
   msg-bar
+  doors/black
 `);
 
 const opts = {
-  eventNameCharAmount: msgBar.width - 2 - 11
+  eventNameCharAmount: msgBar.width - 2 - 11,
+
+  openDoorRefreshRate: 5 * 60 * 1000
 }
 
 calendarRSS.listen(({ items }) => {
@@ -39,3 +42,11 @@ calendarRSS.listen(({ items }) => {
       logger.error(`couldn't write string to msgbar:\n${err}`) 
     })
 })
+
+setInterval(() => {
+  const nextEvent = calendarRSS.virtualState.items[0];
+  if(nextEvent.date - Date.now() < opts.openDoorRefreshRate) {
+    logger.log(`an event will start soon. Enabling one click on black door`);
+    blackDoor.enableOneClick();
+  }
+}, opts.openDoorRefreshRate)
