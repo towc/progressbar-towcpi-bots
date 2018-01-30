@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 let logOutput = '';
-const logFilePath = `${__dirname}/logs/${new Date().toJSON()}`;
+const logFilePath = `${__dirname}/logs/${new Date().toJSON()}.log`;
 let logFileUsable = false;
 
 const colorMap = `
@@ -41,7 +41,15 @@ class Logger {
     this.trace = trace;
   }
   log(text, colors=[]) {
-    const output = `${new Date().toJSON()} ${this.trace.join(' -> ')}: ${text}`;
+    if(typeof text !== 'string') {
+      if(text.toJSON) {
+        text = text.toJSON(); 
+      } else {
+        text = text.toString(); 
+      }
+    }
+
+    const output = `${new Date().toJSON()} ${this.trace.join(' -> ')}: ${text.split('\n').join('\n  ')}`;
     console.log(`${colors.map((color) => colorMap[color]).join('')}${output}${colorMap.Reset}`);
 
     const fileOutput = `\n${output}`;

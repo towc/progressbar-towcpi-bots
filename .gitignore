@@ -1,6 +1,6 @@
 ### Custom ###
 # Logs
-logs/*
+logs/*.log
 
 ### Node ###
 

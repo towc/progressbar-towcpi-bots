@@ -9,4 +9,4 @@ module.exports = (url, method="GET", { body, ...data }) => new Promise((resolve,
   const request = http.request({ hostname: url, method, ...data }, (err, response) => err ? reject(err) : resolve(response));
   request.write(body);
   request.end();
-})
+}).catch(() => {})

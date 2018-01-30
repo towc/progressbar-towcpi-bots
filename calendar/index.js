@@ -11,8 +11,9 @@ const opts = {
 }
 
 calendarRSS.listen(({ items }) => {
+  logger.log(items)
   items = items.slice(0, msgBar.height);
-  msgBar.writeStandardizedString(items.map(({ title, date }) => {
+  const msg = items.map(({ title, date }) => {
 
     title = title.length > opts.eventNameCharAmount ?
       title.substring(0, opts.eventNameCharAmount - 1) + '-' :
@@ -25,6 +26,17 @@ calendarRSS.listen(({ items }) => {
 
     date = `${day}/${month} ${hour}:${minute}`;
 
+
     return `${date} ${title}`;
-  }).join('\n'))
+
+  }).join('\n');
+  logger.log(`writing string to msgbar:\n${msg}`)
+
+  msgBar.writeStandardizedString(msg)
+    .then(() => {
+      logger.ok(`written string to msgbar`) 
+    })
+    .catch((err) => {
+      logger.error(`couldn't write string to msgbar:\n${err}`) 
+    })
 })
