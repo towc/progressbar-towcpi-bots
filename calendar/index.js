@@ -11,7 +11,6 @@ const opts = {
 }
 
 calendarRSS.listen(({ items }) => {
-  logger.log(items)
   items = items.slice(0, msgBar.height);
   const msg = items.map(({ title, date }) => {
 

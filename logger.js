@@ -42,9 +42,9 @@ class Logger {
   }
   log(text, colors=[]) {
     if(typeof text !== 'string') {
-      if(text.toJSON) {
-        text = text.toJSON(); 
-      } else {
+      try {
+        text = JSON.stringify(text); 
+      } catch(e) {
         text = text.toString(); 
       }
     }
