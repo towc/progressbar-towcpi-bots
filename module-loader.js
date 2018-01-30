@@ -8,7 +8,7 @@ module.exports = (moduleString) => {
     .map((moduleName) => moduleName.trim())
     .filter((moduleName) => moduleName.length > 0 && !moduleName.startsWith('#'))
     .map((moduleName) => {
-      logger.log(`loading ${moduleName}`);
+      logger.log(`loading ${moduleName}`, ['Dim']);
       logger.push(moduleName);
       let res;
       switch(moduleName) {
@@ -17,7 +17,7 @@ module.exports = (moduleString) => {
         default: res = require(moduleName.startsWith('@') ? moduleName.replace(/^./, '').trim() : `./${moduleName}`);
       }
       logger.pop();
-      logger.log(`loaded ${moduleName}`);
+      logger.log(`loaded ${moduleName}`, ['Dim']);
       return res;
     })
 }
