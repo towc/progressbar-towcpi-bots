@@ -39,8 +39,8 @@ setInterval(() => {
   let date = Date.now();
   listeners.forEach((listener) => {
     const { period, next, cb, name } = listener;
-    if(date < next) {
-      listener.next = next + period * ms;
+    if(date >= next) {
+      listener.next = next + period;
       switch(cb(date)) {
         case false:
           exported.remove(name)

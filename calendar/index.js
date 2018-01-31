@@ -17,8 +17,7 @@ const opts = {
 calendarRSS.listen(({ items }) => {
   items = items.slice(0, msgBar.height);
   const msg = items.map(({ title, date }) => {
-
-    title = title.length > opts.eventNameCharAmount ?
+title = title.length > opts.eventNameCharAmount ?
       title.substring(0, opts.eventNameCharAmount - 1) + '-' :
       title.padEnd(' ', opts.eventNameCharAmount);
 
@@ -47,10 +46,12 @@ calendarRSS.listen(({ items }) => {
 clock.listen({
   name: 'black door one click on events',
   cb(date) {
-    const { date: eventDate, title } = calendarRSS.virtualState.items[0];
-    if(eventDate - date < opts.openDoorRefreshRate) {
-      logger.log(`event "${title}" will start soon. Enabling one click on black door`);
-      blackDoor.enableOneClick();
+    if(calendarRSS.virtualState.items.length > 0) {
+      const { date: eventDate, title } = calendarRSS.virtualState.items[0];
+      if(eventDate - date < opts.openDoorRefreshRate) {
+        logger.log(`event "${title}" will start soon. Enabling one click on black door`);
+        blackDoor.enableOneClick();
+      }
     }
   },
   period: opts.openDoorRefreshRate

@@ -32,7 +32,7 @@ module.exports = ({
       clock.listen({
         name: 'check calendar updates',
         cb: () => {
-          this.checkUpdates() 
+          this.checkUpdates();
         }, 
         period: 5 * clock.minute
       });
