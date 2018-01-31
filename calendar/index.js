@@ -1,7 +1,8 @@
-const [ logger, calendarRSS, msgBar, blackDoor ] = require('./../module-loader.js')
+const [ logger, clock, calendarRSS, msgBar, blackDoor ] = require('./../module-loader.js')
 (`calendar
 
   logger
+  clock
   calendar/rss
   msg-bar
   doors/black
@@ -10,7 +11,7 @@ const [ logger, calendarRSS, msgBar, blackDoor ] = require('./../module-loader.j
 const opts = {
   eventNameCharAmount: msgBar.width - 2 - 11,
 
-  openDoorRefreshRate: 5 * 60 * 1000
+  openDoorRefreshRate: 5 * clock.minute
 }
 
 calendarRSS.listen(({ items }) => {
@@ -43,10 +44,14 @@ calendarRSS.listen(({ items }) => {
     })
 })
 
-setInterval(() => {
-  const nextEvent = calendarRSS.virtualState.items[0];
-  if(nextEvent.date - Date.now() < opts.openDoorRefreshRate) {
-    logger.log(`an event will start soon. Enabling one click on black door`);
-    blackDoor.enableOneClick();
-  }
-}, opts.openDoorRefreshRate)
+clock.listen({
+  name: 'black door one click on events',
+  cb(date) {
+    const { date: eventDate, title } = calendarRSS.virtualState.items[0];
+    if(eventDate - date < opts.openDoorRefreshRate) {
+      logger.log(`event "${title}" will start soon. Enabling one click on black door`);
+      blackDoor.enableOneClick();
+    }
+  },
+  period: opts.openDoorRefreshRate
+});

@@ -1,7 +1,8 @@
-const [ logger ] = require('./module-loader')
+const [ logger, clock ] = require('./module-loader')
 (`checks
 
   logger
+  clock
 `);
 
 // time
@@ -21,11 +22,15 @@ logger.pop()
 logger.push('(aliveness clock)')
 {
   logger.log('starting aliveness clock');
-  setInterval(() => {
-    logger.push('(alive)')
-    logger.ok();
-    logger.pop();
-  }, 10 * 60 * 1000);
+  clock.listen({
+    name: 'aliveness check',
+    cb: () => {
+      logger.push('(alive)')
+      logger.ok();
+      logger.pop();
+    },
+    period: 10 * clock.minute
+  });
   logger.ok();
 }
 logger.pop()

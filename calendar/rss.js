@@ -1,7 +1,8 @@
-const [ logger, RSSParser ] = require('./../module-loader.js')
+const [ logger, clock, RSSParser ] = require('./../module-loader.js')
 (`rss
 
   logger
+  clock
   @ rss-parser
 `);
 
@@ -28,8 +29,13 @@ module.exports = ({
   listeners: [],
   listen(cb) {
     if(!this.listening) {
-      setInterval(() => this.checkUpdates(), 5*60*1000);
-      this.checkUpdates();
+      clock.listen({
+        name: 'check calendar updates',
+        cb: () => {
+          this.checkUpdates() 
+        }, 
+        period: 5 * clock.minute
+      });
     }
     this.listeners.push(cb);
     cb(this.virtualState);
