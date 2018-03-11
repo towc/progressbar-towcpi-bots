@@ -1,5 +1,4 @@
-const [ logger, blackDoor, whiteDoor ] = require('./../module-loader.js')
-(`doors
+const [logger, blackDoor, whiteDoor] = require('./../module-loader.js')(`doors
 
   logger
   doors/black
@@ -8,5 +7,5 @@ const [ logger, blackDoor, whiteDoor ] = require('./../module-loader.js')
 
 module.exports = {
   blackDoor,
-  whiteDoor
-}
+  whiteDoor,
+};
