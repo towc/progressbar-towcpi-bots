@@ -1,5 +1,4 @@
-const [ logger, httpPromise ] = require('./../module-loader')
-(`lamps
+const [logger, httpPromise] = require('./../module-loader')(`lamps
 
   logger
   http-promise
@@ -27,10 +26,10 @@ class Lamp {
 module.exports = {
   hall: {
     left: new Lamp('control.bar/lights/main/front/On', 'control.bar/lights/main/front/Off'),
-    right: new Lamp('control.bar/lights/main/back/On', 'control.bar/lights/main/back/Off')
+    right: new Lamp('control.bar/lights/main/back/On', 'control.bar/lights/main/back/Off'),
   },
   lab: {
     left: new Lamp('control.bar/lights/lab/front/On', 'control.bar/lights/lab/front/Off'),
-    right: new Lamp('control.bar/lights/lab/back/On', 'control.bar/lights/lab/back/Off')
-  }
-}
+    right: new Lamp('control.bar/lights/lab/back/On', 'control.bar/lights/lab/back/Off'),
+  },
+};
