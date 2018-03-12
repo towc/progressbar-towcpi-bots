@@ -16,12 +16,12 @@ const apiRoute = express.Router();
 app.use('/api', apiRoute);
 apiRoute.get('/msg-bar/display-temporary/:msg/:timeMS', (req, res) => {
   const prevString = msgBar.virtualState;
-  const { msg } = req.params;
-  msgBar.writeStandardizedString(msg);
+  const { msg } = msgBar.standardizeString(req.params);
+  msgBar.writeString(msg);
 
   setTimeout(() => {
     if (msgBar.virtualState === msg) {
-      msgBar.writeStandardizedString(prevString);
+      msgBar.writeString(prevString);
     }
   }, parseInt(req.params.timeMS, 10));
 
