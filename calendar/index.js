@@ -9,7 +9,7 @@ const [ logger, clock, calendarRSS, msgBar, blackDoor ] = require('./../module-l
 `);
 
 const opts = {
-  eventNameCharAmount: msgBar.width - 2 - 11,
+  eventNameCharAmount: msgBar.width - 2 - 5,
 
   openDoorRefreshRate: 5 * clock.minute
 }
@@ -18,7 +18,7 @@ calendarRSS.listen(({ items }) => {
   items = items.slice(0, msgBar.height);
   const msg = items.map(({ title, date }) => {
 title = title.length > opts.eventNameCharAmount ?
-      title.substring(0, opts.eventNameCharAmount - 1) + '-' :
+      title.substring(0, opts.eventNameCharAmount - 1) + '_' :
       title.padEnd(' ', opts.eventNameCharAmount);
 
     const day = date.getDate().toString().padStart(2, '0');
@@ -26,7 +26,7 @@ title = title.length > opts.eventNameCharAmount ?
     const hour = date.getHours().toString().padStart(2, '0');
     const minute = date.getMinutes().toString().padStart(2, '0');
 
-    date = `${day}/${month} ${hour}:${minute}`;
+    date = `${day}<${hour}`;
 
 
     return `${date} ${title}`;
