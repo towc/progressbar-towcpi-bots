@@ -31,74 +31,74 @@ const colorMap = `
 	BgCyan \x1b[46m
 	BgWhite \x1b[47m
 `.split('\n')
-  .map((x) => x.trim())
-  .filter((x) => x.length > 0)
-  .map((x) => x.split(' '))
-  .reduce((acc, [color, value]) => ({ ...acc, [color]: value}), {});
+  .map(x => x.trim())
+  .filter(x => x.length > 0)
+  .map(x => x.split(' '))
+  .reduce((acc, [color, value]) => ({ ...acc, [color]: value }), {});
 
 class Logger {
   constructor(trace) {
     this.trace = trace;
   }
-  log(text, colors=[]) {
-    if(typeof text !== 'string') {
+  log(text, colors = []) {
+    if (typeof text !== 'string') {
       try {
-        text = JSON.stringify(text); 
-      } catch(e) {
-        text = text.toString(); 
+        text = JSON.stringify(text);
+      } catch (e) {
+        text = text.toString();
       }
     }
 
     const output = `${new Date().toJSON()} ${this.trace.join(' -> ')}: ${text.split('\n').join('\n  ')}`;
-    console.log(`${colors.map((color) => colorMap[color]).join('')}${output}${colorMap.Reset}`);
+    console.log(`${colors.map(color => colorMap[color]).join('')}${output}${colorMap.Reset}`);
 
     const fileOutput = `\n${output}`;
-    if(logFileUsable) {
+    if (logFileUsable) {
       fs.appendFile(logFilePath, fileOutput, (err) => {
-        if(err) {
+        if (err) {
           logFileUsable = false;
-          logger.error(`couldn't write text to log file`);
-        } 
+          logger.error('couldn\'t write text to log file');
+        }
       });
     } else {
       logOutput += fileOutput;
     }
   }
-  error(text, colors=[]) {
-    this.log(text ? `ERROR: ${text}` : `ERROR`, ['FgRed', ...colors]);
+  error(text, colors = []) {
+    this.log(text ? `ERROR: ${text}` : 'ERROR', ['FgRed', ...colors]);
   }
-  ok(text, colors=[]) {
-    this.log(text ? `OK: ${text}` : `OK`, ['FgGreen', ...colors]);
+  ok(text, colors = []) {
+    this.log(text ? `OK: ${text}` : 'OK', ['FgGreen', ...colors]);
   }
   push(module) {
-    this.trace.push(module); 
+    this.trace.push(module);
   }
-  pop(amount=1) {
-    while(amount > 0) {
-      this.trace.pop(); 
+  pop(amount = 1) {
+    while (amount > 0) {
+      this.trace.pop();
       --amount;
     }
   }
 }
 
-const logger = new Logger(['main', 'logger']); 
+const logger = new Logger(['main', 'logger']);
 
 logger.log('creating log file');
 fs.appendFile(logFilePath, '', (err) => {
-  if(err) {
+  if (err) {
     logger.error(`couldn't use log file: ${err}`);
   } else {
     logger.ok(`created log file at ${logFilePath}`);
     logFileUsable = true;
 
     fs.appendFile(logFilePath, logOutput, (err) => {
-      if(err) {
-      
+      if (err) {
+
       } else {
         logger.ok('updated log file with buffer');
       }
-    })
+    });
   }
-})
+});
 
 module.exports = Logger;

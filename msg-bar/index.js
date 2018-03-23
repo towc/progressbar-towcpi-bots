@@ -1,5 +1,4 @@
-const [ logger, httpPromise ] = require('./../module-loader.js')
-(`msg-bar
+const [logger, httpPromise] = require('./../module-loader.js')(`msg-bar
 
   logger
   http-promise
@@ -50,7 +49,7 @@ const standardizationMap = `
   w ŵ
   y ýÿŷ
   z źżž
-`.split('\n').map((str) => str.trim().split(' ')).filter((pair) => pair.length === 2);
+`.split('\n').map(str => str.trim().split(' ')).filter(pair => pair.length === 2);
 
 module.exports = ({
   virtualState: '',
@@ -60,17 +59,17 @@ module.exports = ({
     return string
       .split('')
       .reduce((acc, char) => {
-        if(acc.length >= this.width * this.height) {
+        if (acc.length >= this.width * this.height) {
           return acc;
         }
 
         const mapPair = standardizationMap.find(([_, originSet]) => originSet.includes(char));
-        if(mapPair) {
-          acc += mapPair[0]; 
+        if (mapPair) {
+          acc += mapPair[0];
         } else {
           const code = char.charCodeAt(0);
-          if(code < 0x20 || code > 0x7E) {
-            switch(char) {
+          if (code < 0x20 || code > 0x7E) {
+            switch (char) {
               case '\n': acc += Array(this.width - acc.length).fill(' ').join('');
                 break;
               case '\t': acc += Array(4 - (acc.length % 4)).fill(' ').join('');
@@ -78,7 +77,7 @@ module.exports = ({
               default: acc += '?';
             }
           } else {
-            acc += char; 
+            acc += char;
           }
         }
 
@@ -87,10 +86,10 @@ module.exports = ({
   },
   writeString(string) {
     this.virtualState = string;
-    string = 'msg=' + string;
+    string = `msg=${string}`;
     return httpPromise('msg.bar', 'POST', { headers: { 'Content-Length': string.length }, body: string });
   },
   writeStandardizedString(string) {
     return this.writeString(this.standardizeString(string));
-  }
-})
+  },
+});

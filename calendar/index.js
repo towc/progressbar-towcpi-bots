@@ -11,8 +11,8 @@ const [ logger, clock, calendarRSS, msgBar, blackDoor ] = require('./../module-l
 const opts = {
   eventNameCharAmount: msgBar.width - 2 - 5,
 
-  openDoorRefreshRate: 5 * clock.minute
-}
+  openDoorRefreshRate: 5 * clock.minute,
+};
 
 calendarRSS.listen(({ items }) => {
   items = items.slice(0, msgBar.height);
@@ -30,29 +30,28 @@ title = title.length > opts.eventNameCharAmount ?
 
 
     return `${date} ${title}`;
-
   }).join('\n');
   logger.log(`writing string to msgbar:\n${msg}`)
 
   msgBar.writeStandardizedString(msg)
     .then(() => {
-      logger.ok(`written string to msgbar`) 
+      logger.ok('written string to msgbar');
     })
     .catch((err) => {
-      logger.error(`couldn't write string to msgbar:\n${err}`) 
-    })
-})
+      logger.error(`couldn't write string to msgbar:\n${err}`);
+    });
+});
 
 clock.listen({
   name: 'black door one click on events',
   cb(date) {
-    if(calendarRSS.virtualState.items.length > 0) {
+    if (calendarRSS.virtualState.items.length > 0) {
       const { date: eventDate, title } = calendarRSS.virtualState.items[0];
-      if(eventDate - date < opts.openDoorRefreshRate) {
+      if (eventDate - date < opts.openDoorRefreshRate) {
         logger.log(`event "${title}" will start soon. Enabling one click on black door`);
         blackDoor.enableOneClick();
       }
     }
   },
-  period: opts.openDoorRefreshRate
+  period: opts.openDoorRefreshRate,
 });

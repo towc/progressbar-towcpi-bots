@@ -1,5 +1,4 @@
-const [ logger, httpPromise, portals, lamps ] = require('./../module-loader')
-(`lights
+const [logger, httpPromise, portals, lamps] = require('./../module-loader')(`lights
 
   logger
   http-promise
@@ -9,5 +8,5 @@ const [ logger, httpPromise, portals, lamps ] = require('./../module-loader')
 
 module.exports = {
   portals,
-  lamps
-}
+  lamps,
+};
